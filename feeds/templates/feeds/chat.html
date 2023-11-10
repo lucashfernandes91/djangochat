@@ -1,0 +1,29 @@
+{% extends 'feeds/base.html' %}
+
+{% load static %}
+
+{% block content %}
+	<div id="messages">
+		{% for message in messages %}
+		<h1>Teste</h1>
+		<h1>{{request.user}}</h1>
+		<div class="{% if request.user == message.sender %}message-sent{% else %}message-received{% endif %}">
+			{% if request.user != message.sender.username %}<div class="sender">{{ message.sender.username }}</div>{% endif %}
+			<div class="text">{{ message.text }}</div>
+		</div>
+		{% endfor %}
+	</div>
+
+	<form id="chatForm">
+		<div id="chatData" style="display: none">
+			<span id="session-key">{{ request.session.session_key }}</span>
+			<span id="user">{{ request.user.username }}</span>
+		</div>
+		<input type="text" id="messageInput" placeholder="Write a message...">
+	</form>
+
+{% endblock %}
+
+{% block extrascript %}
+	<script src="{% static 'js/inbox.js' %}"></script>
+{% endblock %}

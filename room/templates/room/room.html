@@ -1,0 +1,102 @@
+{% extends 'feeds/base.html' %}
+
+{% load static %}
+
+{% block content %}
+	<div id="messages">
+		{% for message in messages %}
+			<div class="{% if request.user == message.sender %}message-sent{% else %}message-received{% endif %}">
+				{% if request.user != message.sender.username %}
+					<div class="sender">{{ message.sender.username }}</div>
+				{% endif %}
+			<div class="text">{{ message.text }}</div>
+		</div>
+		{% endfor %}
+	</div>
+
+	<form id="chatForm">
+		<h1>TESTE</h1>
+		<div id="chatData" style="display: none">
+			<span id="session-key">{{ request.session.session_key }}</span>
+			<span id="user">{{ request.user.username }}</span>
+			<span id="roomName">{{ room }}</span>
+		</div>
+		<input type="text" id="messageInput" placeholder="Write a message...">
+		<button 
+		class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700"
+		id="chat-message-submit">Submit</button>
+	</form>
+
+{% endblock %}
+
+{% block extrascript %}
+
+<script>
+	const roomName = document.getElementById('roomName').textContent;
+	const userName = document.getElementById('user').textContent;
+	const chatSocket = new WebSocket(
+		'ws://'
+		+ window.location.host
+		+ '/ws/'
+		+ roomName
+		+ '/'
+	);
+	
+	chatSocket.onclose = function(e) {
+		console.log('onclose')
+	}
+
+	chatSocket.onmessage = function(e) {
+		const data = JSON.parse(e.data);
+
+		if (data.message) {
+			document.querySelector('#messages').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
+		} else {
+			alert('The message was empty!')
+		}
+
+		scrollToBottom();
+	};
+
+	document.querySelector('#messageInput').focus();
+	document.querySelector('#messageInput').onkeyup = function(e) {
+		if (e.keyCode === 13) {
+			document.querySelector('#chat-message-submit').click();
+		}
+	};
+
+	document.querySelector('#chat-message-submit').onclick = function(e) {
+		e.preventDefault()
+
+		const messageInputDom = document.querySelector('#messageInput');
+		const message = messageInputDom.value;
+
+		console.log({
+			'message': message,
+			'username': userName,
+			'room': roomName
+		})
+
+		chatSocket.send(JSON.stringify({
+			'message': message,
+			'username': userName,
+			'room': roomName
+		}));
+
+		messageInputDom.value = '';
+
+		return false
+	};
+
+	/**
+	* A function for finding the messages element, and scroll to the bottom of it.
+	*/
+	function scrollToBottom() {
+		let objDiv = document.getElementById("messages");
+		objDiv.scrollTop = objDiv.scrollHeight;
+	}
+
+	// Add this below the function to trigger the scroll on load.
+	scrollToBottom();
+</script>
+{% endblock %}

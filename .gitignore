@@ -1,0 +1,15 @@
+db-sqlite3
+.idea
+venv
+core/__pycache__/*
+djangochat/__pycache__/*
+feeds/__pycache__/*
+feeds/templatetags/__pycache__/*
+room/__pycache__/*
+core/migrations/*
+djangochat/migrations/*
+feeds/migrations/*
+room/migrations/*
+media/
+db.sqlite3
+README.md
