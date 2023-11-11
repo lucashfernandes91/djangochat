@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from datetime import datetime
 from imagekit.models import ProcessedImageField
-
+from django.utils.html import format_html
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -41,7 +41,7 @@ class IGPost(models.Model):
 	user_profile = models.ForeignKey(UserProfile, null=True, blank=True, on_delete=models.CASCADE)
 	title = models.CharField(max_length=100)
 	image = ProcessedImageField(upload_to='posts',
-								#processors=[ResizeToFill(200,200)],
+								#processors=[Thumbnail(200,200)],
 								format='JPEG',
 								options={ 'quality': 100})
 	posted_on = models.DateTimeField(default=datetime.now)
@@ -55,6 +55,9 @@ class IGPost(models.Model):
 	def __str__(self):
 		return self.title
 
+	def thumbnail(self):
+		return format_html(f'<img src="{self.image.url}" width="99%">')
+	thumbnail.allow_tags = True
 
 class Comment(models.Model):
 	post = models.ForeignKey('IGPost', on_delete=models.CASCADE)

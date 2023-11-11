@@ -4,9 +4,11 @@
 <div class="row" id="explore">
 	{% for post in posts reversed %}
 	<div class="col-xs-4 col-sm-3">
-		<div class="picture-square" style="background-image: url({{ post.image.url }})">
+		<div class="picture-square-explore" style="background-image: url()">
+		<!--<div class="picture-square-explore" style="background-image: url()"></div>-->
 			<a href="{% url 'post' post.pk %}">
 				<div class="content"></div>
+				{{ post.thumbnail }}
 			</a>
 		</div>
 	</div>

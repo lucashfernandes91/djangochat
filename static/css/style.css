@@ -579,3 +579,37 @@ a:hover {
   padding: 0; }
 
 /*# sourceMappingURL=style.css.map */
+
+.picture-square-explore {
+	position: relative;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #fff;
+	cursor: pointer; }
+	.picture-square-explore > a {
+		cursor: pointer; }
+	.picture-square-explore:after {
+		content: "";
+		display: block;
+		padding-bottom: 1%; }
+	.picture-square-explore .content {
+		cursor: pointer;
+		display: none;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.3); }
+	.picture-square-explore:hover .content {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 18px;
+		color: #fff; }
+		.picture-square-explore:hover .content .fa {
+		color: #fff;
+		margin-right: 5px; }
+		.picture-square-explore:hover .content .fa:not(:first-of-type) {
+			margin-left: 25px; }
+			@media screen and (max-width: 724px) {
+			.picture-square-explore:hover .content .fa:not(:first-of-type) {
+				margin-left: 10px; } }
